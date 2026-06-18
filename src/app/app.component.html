@@ -13,30 +13,45 @@
     <section class="filter-block">
       <h2>Accounting Method</h2>
       <div class="segmented" aria-label="Accounting method">
-        <button class="selected" type="button">Accrual</button>
-        <button type="button">Cash</button>
+        @for (method of methods; track method) {
+          <button
+            [class.selected]="selectedMethod === method"
+            type="button"
+            (click)="setMethod(method)"
+          >
+            {{ method }}
+          </button>
+        }
       </div>
     </section>
 
     <section class="filter-block">
       <h2>Date Range</h2>
-      <button class="select-button" type="button" title="Would open a date-range picker backed by available reporting periods.">
-        <span>2026</span>
+      <label class="select-shell">
+        <select [value]="selectedYear" (change)="setYear($any($event.target).value)">
+          @for (year of years; track year) {
+            <option [value]="year">{{ year }}</option>
+          }
+        </select>
         <svg class="icon" [lucideIcon]="icons.chevronDown" aria-hidden="true"></svg>
-      </button>
+      </label>
     </section>
 
     <section class="filter-block">
       <h2>Channel</h2>
-      <button class="select-button" type="button" title="Would filter the dashboard by connected ecommerce and retail channels.">
-        <span>All channels</span>
+      <label class="select-shell">
+        <select [value]="selectedChannel" (change)="setChannel($any($event.target).value)">
+          @for (channel of channels; track channel) {
+            <option [value]="channel">{{ channel }}</option>
+          }
+        </select>
         <svg class="icon" [lucideIcon]="icons.chevronDown" aria-hidden="true"></svg>
-      </button>
+      </label>
     </section>
 
     <div class="side-status">
       <svg class="icon" [lucideIcon]="icons.cloud" aria-hidden="true"></svg>
-      <span>Mock sync ready</span>
+      <span>{{ selectedMethod }} / {{ selectedYear }}</span>
     </div>
   </aside>
 
@@ -47,24 +62,26 @@
         <h2>ShopPulse by Mark Vigo</h2>
       </div>
       <div class="actions" aria-label="Dashboard actions">
-        <button type="button" title="Would refresh live metrics from the connected database.">
+        <button class="tip" type="button" data-tip="Would refresh live metrics from the connected database." (click)="runAction('refresh')">
           <svg class="icon" [lucideIcon]="icons.refreshCw" aria-hidden="true"></svg>
         </button>
-        <button type="button" title="Would open saved filters, segments, and custom metric controls.">
+        <button class="tip" type="button" data-tip="Would open saved filters, segments, and custom metric controls." (click)="runAction('controls')">
           <svg class="icon" [lucideIcon]="icons.slidersHorizontal" aria-hidden="true"></svg>
         </button>
-        <button type="button" title="Would export the current dashboard view as CSV or PDF.">
+        <button class="tip" type="button" data-tip="Would export the current dashboard view as CSV or PDF." (click)="runAction('export')">
           <svg class="icon" [lucideIcon]="icons.download" aria-hidden="true"></svg>
         </button>
-        <button type="button" title="Would show database sync status, freshness, and connector health.">
+        <button class="tip" type="button" data-tip="Would show database sync status, freshness, and connector health." (click)="runAction('database')">
           <svg class="icon" [lucideIcon]="icons.database" aria-hidden="true"></svg>
         </button>
       </div>
     </header>
 
+    <p class="notice" aria-live="polite">{{ notice }}</p>
+
     <section class="metric-grid" aria-label="Key metrics">
       @for (metric of metrics; track metric.label) {
-        <article class="metric-card">
+        <button class="metric-card" [class.active]="activeMetric.key === metric.key" type="button" (click)="selectMetric(metric)">
           <div class="metric-label">
             <svg class="icon" [lucideIcon]="metric.icon" aria-hidden="true"></svg>
             <span>{{ metric.label }}</span>
@@ -74,7 +91,7 @@
             <svg class="icon" [lucideIcon]="metric.status === 'up' ? icons.arrowUpRight : icons.arrowDownRight" aria-hidden="true"></svg>
             {{ metric.delta }}
           </p>
-        </article>
+        </button>
       }
     </section>
 
@@ -82,10 +99,10 @@
       <article class="panel trend-panel">
         <div class="panel-heading">
           <div>
-            <h3>Revenue Budget / Fact Trend</h3>
-            <p>Monthly sales performance</p>
+            <h3>{{ activeMetric.label }} Budget / Fact Trend</h3>
+            <p>{{ chartRangeLabel }}</p>
           </div>
-          <button type="button" title="Would search transactions and explain the variance for the selected month.">
+          <button class="tip" type="button" data-tip="Would search transactions and explain the variance for the selected month." (click)="runAction('search')">
             <svg class="icon" [lucideIcon]="icons.search" aria-hidden="true"></svg>
           </button>
         </div>
@@ -96,27 +113,29 @@
         </div>
 
         <div class="chart-wrap">
-          <svg class="line-chart" viewBox="0 0 640 180" role="img" aria-label="Revenue actual and budget trend">
-            <path class="grid-line" d="M0 25 H640 M0 75 H640 M0 125 H640 M0 175 H640"></path>
-            <path class="plan-line" [attr.d]="planPath"></path>
-            <path class="actual-line" [attr.d]="actualPath"></path>
-            @for (dot of planDots; track dot.x) {
+          <svg class="line-chart" viewBox="0 0 720 250" role="img" [attr.aria-label]="activeMetric.label + ' actual and budget trend'">
+            @for (tick of yTicks; track tick) {
+              <line class="grid-line" x1="56" x2="702" [attr.y1]="tickY(tick)" [attr.y2]="tickY(tick)"></line>
+              <text class="axis-label" x="47" [attr.y]="tickY(tick) + 4">{{ tick }}K</text>
+            }
+            <polyline class="plan-line" [attr.points]="planPolyline"></polyline>
+            <polyline class="actual-line" [attr.points]="actualPolyline"></polyline>
+            @for (dot of chartDots('plan'); track dot.month) {
               <circle class="plan-point" [attr.cx]="dot.x" [attr.cy]="dot.y" r="4"></circle>
             }
-            @for (dot of actualDots; track dot.x) {
+            @for (dot of chartDots('actual'); track dot.month) {
               <circle class="actual-point" [attr.cx]="dot.x" [attr.cy]="dot.y" r="4"></circle>
+              <text class="point-label" [attr.x]="dot.x" [attr.y]="dot.y - 9">{{ dot.value }}K</text>
+            }
+            @for (dot of chartDots('actual'); track dot.month) {
+              <text class="month-label" [attr.x]="dot.x" y="240">{{ dot.month }}</text>
             }
           </svg>
-          <div class="months">
-            @for (point of trend; track point.month) {
-              <span>{{ point.month }}</span>
-            }
-          </div>
         </div>
 
         <div class="bar-section">
           <h3>Sales Channels</h3>
-          @for (category of categories; track category.label) {
+          @for (category of activeCategories; track category.label) {
             <div class="bar-row">
               <span>{{ category.label }}</span>
               <div class="bars">
@@ -126,6 +145,82 @@
             </div>
           }
         </div>
+
+        <section class="insight-grid" aria-label="Operational intelligence panels">
+          <div class="mini-panel funnel-panel">
+            <div class="mini-heading">
+              <h4>Conversion Funnel</h4>
+              <button class="tip" type="button" data-tip="Would open customer journey filters for the selected stage." (click)="runAction('funnel')">
+                <svg class="icon" [lucideIcon]="icons.filter" aria-hidden="true"></svg>
+              </button>
+            </div>
+            @for (stage of funnel; track stage.label) {
+              <button class="funnel-row" type="button" (click)="runAction('funnel')">
+                <span>{{ stage.label }}</span>
+                <b>{{ stage.value }}</b>
+                <i [style.width.%]="stage.percent"></i>
+              </button>
+            }
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-heading">
+              <h4>Product Leaders</h4>
+              <span>{{ selectedProduct }}</span>
+            </div>
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Rev</th>
+                  <th>GM</th>
+                  <th>Stock</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (product of products; track product.sku) {
+                  <tr [class.active-row]="selectedProduct === product.sku" (click)="selectProduct(product)">
+                    <td>{{ product.sku }}</td>
+                    <td>{{ product.revenue }}</td>
+                    <td>{{ product.margin }}</td>
+                    <td [class]="product.status">{{ product.stock }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-heading">
+              <h4>Campaign ROI</h4>
+              <span>{{ selectedCampaign }}</span>
+            </div>
+            @for (campaign of campaigns; track campaign.name) {
+              <button class="campaign-row" [class.active-row]="selectedCampaign === campaign.name" type="button" (click)="selectCampaign(campaign)">
+                <span>{{ campaign.name }}</span>
+                <b>{{ campaign.roas }}</b>
+                <i [style.width.%]="campaign.share"></i>
+                <small>{{ campaign.spend }}</small>
+              </button>
+            }
+          </div>
+
+          <div class="mini-panel">
+            <div class="mini-heading">
+              <h4>Inventory Risk</h4>
+              <button class="tip" type="button" data-tip="Would open purchase-order and demand forecast details." (click)="runAction('inventory')">
+                <svg class="icon" [lucideIcon]="icons.package" aria-hidden="true"></svg>
+              </button>
+            </div>
+            @for (item of inventory; track item.item) {
+              <button class="inventory-row" type="button" (click)="runAction('inventory')">
+                <span>{{ item.item }}</span>
+                <b [class]="item.status">{{ item.cover }}</b>
+                <small>{{ item.demand }}</small>
+              </button>
+            }
+          </div>
+        </section>
       </article>
 
       <article class="panel table-panel">
@@ -134,7 +229,7 @@
             <h3>Budget</h3>
             <p>Account performance</p>
           </div>
-          <button type="button" title="Would open editable budget mappings and account rollups.">
+          <button class="tip" type="button" data-tip="Would open editable budget mappings and account rollups." (click)="runAction('filter')">
             <svg class="icon" [lucideIcon]="icons.filter" aria-hidden="true"></svg>
           </button>
         </div>
@@ -149,12 +244,21 @@
           </thead>
           <tbody>
             @for (line of budgetLines; track line.account) {
-              <tr>
-                <td><span class="expand">+</span>{{ line.account }}</td>
+              <tr class="data-row" [class.open]="expandedAccount === line.account" (click)="toggleAccount(line.account)">
+                <td>
+                  <button class="account-button" type="button">
+                    <span class="expand">{{ expandedAccount === line.account ? '-' : '+' }}</span>{{ line.account }}
+                  </button>
+                </td>
                 <td>{{ line.budget }}</td>
                 <td>{{ line.actual }}</td>
                 <td [class]="line.status">{{ line.variance }}</td>
               </tr>
+              @if (expandedAccount === line.account) {
+                <tr class="detail-row">
+                  <td colspan="4">{{ line.detail }}</td>
+                </tr>
+              }
             }
           </tbody>
         </table>
@@ -163,7 +267,7 @@
       <article class="panel gauge-panel">
         <div class="panel-heading compact">
           <h3>Budget / Actual Difference</h3>
-          <button type="button" title="Would drill into the accounts contributing most to this variance.">
+          <button class="tip" type="button" data-tip="Would drill into the accounts contributing most to this variance." (click)="runAction('variance')">
             <svg class="icon" [lucideIcon]="icons.alertCircle" aria-hidden="true"></svg>
           </button>
         </div>
@@ -181,7 +285,7 @@
             <h3>Regional Pulse</h3>
             <p>Orders, conversion, and revenue</p>
           </div>
-          <button type="button" title="Would compare region-level cohorts with live customer data.">
+          <button class="tip" type="button" data-tip="Would compare region-level cohorts with live customer data." (click)="runAction('cohorts')">
             <svg class="icon" [lucideIcon]="icons.users" aria-hidden="true"></svg>
           </button>
         </div>
@@ -203,12 +307,31 @@
             <h3>Signals</h3>
             <p>Mock operational alerts</p>
           </div>
-          <button type="button" title="Would configure automated alerts and send notifications to the team.">
+          <button class="tip" type="button" data-tip="Would configure automated alerts and send notifications to the team." (click)="runAction('alerts')">
             <svg class="icon" [lucideIcon]="icons.bell" aria-hidden="true"></svg>
           </button>
         </div>
         @for (alert of alerts; track alert) {
           <p><svg class="icon" [lucideIcon]="icons.calendarDays" aria-hidden="true"></svg>{{ alert }}</p>
+        }
+      </article>
+
+      <article class="panel cash-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Cashflow Snapshot</h3>
+            <p>Payouts, bills, and open AR</p>
+          </div>
+          <button class="tip" type="button" data-tip="Would open invoice, payout, and bill-payment reconciliation." (click)="runAction('cashflow')">
+            <svg class="icon" [lucideIcon]="icons.database" aria-hidden="true"></svg>
+          </button>
+        </div>
+        @for (flow of cashFlow; track flow.label) {
+          <button class="cash-row" type="button" (click)="runAction('cashflow')">
+            <span>{{ flow.label }}</span>
+            <i [class]="flow.status" [style.width.%]="flow.width"></i>
+            <b>{{ flow.value }}</b>
+          </button>
         }
       </article>
     </section>

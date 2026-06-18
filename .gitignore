@@ -24,3 +24,6 @@ Thumbs.db
 
 # Vercel
 .vercel/
+
+# Local dev server scratch logs
+ng-server*.log
