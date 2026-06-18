@@ -146,11 +146,11 @@ export class AppComponent {
   };
 
   readonly metrics: Metric[] = [
-    { key: 'Revenue', label: 'Revenue', value: '$1.97M', delta: '+9% vs target', status: 'up', icon: LucideCircleDollarSign.icon },
+    { key: 'Revenue', label: 'Revenue', value: '₱1.97M', delta: '+9% vs target', status: 'up', icon: LucideCircleDollarSign.icon },
     { key: 'Orders', label: 'Orders', value: '38,502', delta: '+11% vs target', status: 'up', icon: LucideShoppingCart.icon },
     { key: 'Gross Margin', label: 'Gross Margin', value: '58.4%', delta: '+3.2 pts', status: 'up', icon: LucideTrendingUp.icon },
     { key: 'Returns', label: 'Returns', value: '2.8%', delta: '-0.6 pts', status: 'down', icon: LucidePackage.icon },
-    { key: 'Net Profit', label: 'Net Profit', value: '$154K', delta: '-4% vs plan', status: 'down', icon: LucideActivity.icon }
+    { key: 'Net Profit', label: 'Net Profit', value: '₱154K', delta: '-4% vs plan', status: 'down', icon: LucideActivity.icon }
   ];
 
   readonly baseTrend: TrendPoint[] = [
@@ -184,19 +184,19 @@ export class AppComponent {
   ];
 
   readonly budgetLines: BudgetLine[] = [
-    { account: 'Sales Revenue', budget: '$2.18M', actual: '$1.97M', variance: '-9%', status: 'down', detail: 'Would expand into product, coupon, and marketplace fee adjustments.' },
-    { account: 'Cost of Goods Sold', budget: '$435K', actual: '$388K', variance: '+11%', status: 'up', detail: 'Would show vendor cost movement and landed-cost assumptions.' },
-    { account: 'Paid Acquisition', budget: '$274K', actual: '$251K', variance: '+8%', status: 'up', detail: 'Would connect campaign pacing, CAC, and ROAS by channel.' },
-    { account: 'Fulfillment', budget: '$199K', actual: '$226K', variance: '-14%', status: 'down', detail: 'Would drill into carrier, zone, and warehouse exception costs.' },
-    { account: 'Subscriptions', budget: '$82K', actual: '$76K', variance: '+7%', status: 'up', detail: 'Would list app, SaaS, and payment processor subscriptions.' },
-    { account: 'Net Profit', budget: '$161K', actual: '$154K', variance: '-4%', status: 'down', detail: 'Would reconcile revenue, margin, operating spend, and one-off adjustments.' }
+    { account: 'Sales Revenue', budget: '₱2.18M', actual: '₱1.97M', variance: '-9%', status: 'down', detail: 'Would expand into product, coupon, and marketplace fee adjustments.' },
+    { account: 'Cost of Goods Sold', budget: '₱435K', actual: '₱388K', variance: '+11%', status: 'up', detail: 'Would show vendor cost movement and landed-cost assumptions.' },
+    { account: 'Paid Acquisition', budget: '₱274K', actual: '₱251K', variance: '+8%', status: 'up', detail: 'Would connect campaign pacing, CAC, and ROAS by channel.' },
+    { account: 'Fulfillment', budget: '₱199K', actual: '₱226K', variance: '-14%', status: 'down', detail: 'Would drill into carrier, zone, and warehouse exception costs.' },
+    { account: 'Subscriptions', budget: '₱82K', actual: '₱76K', variance: '+7%', status: 'up', detail: 'Would list app, SaaS, and payment processor subscriptions.' },
+    { account: 'Net Profit', budget: '₱161K', actual: '₱154K', variance: '-4%', status: 'down', detail: 'Would reconcile revenue, margin, operating spend, and one-off adjustments.' }
   ];
 
   readonly regions: RegionLine[] = [
-    { region: 'North America', orders: '18,420', conversion: '4.8%', revenue: '$982K' },
-    { region: 'Europe', orders: '9,804', conversion: '3.9%', revenue: '$511K' },
-    { region: 'APAC', orders: '7,260', conversion: '3.4%', revenue: '$356K' },
-    { region: 'LATAM', orders: '3,018', conversion: '2.7%', revenue: '$119K' }
+    { region: 'North America', orders: '18,420', conversion: '4.8%', revenue: '₱982K' },
+    { region: 'Europe', orders: '9,804', conversion: '3.9%', revenue: '₱511K' },
+    { region: 'APAC', orders: '7,260', conversion: '3.4%', revenue: '₱356K' },
+    { region: 'LATAM', orders: '3,018', conversion: '2.7%', revenue: '₱119K' }
   ];
 
   readonly alerts = [
@@ -214,17 +214,17 @@ export class AppComponent {
   ];
 
   readonly products: ProductLine[] = [
-    { sku: 'Aero Tote', revenue: '$412K', margin: '62%', stock: '42d', status: 'up' },
-    { sku: 'Studio Lamp', revenue: '$286K', margin: '54%', stock: '9d', status: 'down' },
-    { sku: 'Desk Kit', revenue: '$233K', margin: '49%', stock: '18d', status: 'flat' },
-    { sku: 'Travel Dock', revenue: '$191K', margin: '57%', stock: '31d', status: 'up' }
+    { sku: 'Aero Tote', revenue: '₱412K', margin: '62%', stock: '42d', status: 'up' },
+    { sku: 'Studio Lamp', revenue: '₱286K', margin: '54%', stock: '9d', status: 'down' },
+    { sku: 'Desk Kit', revenue: '₱233K', margin: '49%', stock: '18d', status: 'flat' },
+    { sku: 'Travel Dock', revenue: '₱191K', margin: '57%', stock: '31d', status: 'up' }
   ];
 
   readonly campaigns: CampaignLine[] = [
-    { name: 'Search Brand', spend: '$82K', roas: '7.4x', share: 92 },
-    { name: 'Social Prospecting', spend: '$74K', roas: '3.1x', share: 58 },
-    { name: 'Retargeting', spend: '$51K', roas: '5.8x', share: 76 },
-    { name: 'Creator Codes', spend: '$44K', roas: '4.6x', share: 64 }
+    { name: 'Search Brand', spend: '₱82K', roas: '7.4x', share: 92 },
+    { name: 'Social Prospecting', spend: '₱74K', roas: '3.1x', share: 58 },
+    { name: 'Retargeting', spend: '₱51K', roas: '5.8x', share: 76 },
+    { name: 'Creator Codes', spend: '₱44K', roas: '4.6x', share: 64 }
   ];
 
   readonly inventory: InventoryLine[] = [
@@ -235,10 +235,10 @@ export class AppComponent {
   ];
 
   readonly cashFlow = [
-    { label: 'Cash In', value: '$712K', width: 88, status: 'up' },
-    { label: 'Cash Out', value: '$558K', width: 69, status: 'down' },
-    { label: 'Open AR', value: '$184K', width: 34, status: 'flat' },
-    { label: 'Projected', value: '$239K', width: 48, status: 'up' }
+    { label: 'Cash In', value: '₱712K', width: 88, status: 'up' },
+    { label: 'Cash Out', value: '₱558K', width: 69, status: 'down' },
+    { label: 'Open AR', value: '₱184K', width: 34, status: 'flat' },
+    { label: 'Projected', value: '₱239K', width: 48, status: 'up' }
   ];
 
   get activeMetric(): Metric {

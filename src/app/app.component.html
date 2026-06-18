@@ -146,6 +146,45 @@
           }
         </div>
 
+        <section class="pulse-row" aria-label="Regional and operational signals">
+          <div class="sub-panel regional-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Regional Pulse</h3>
+                <p>Orders, conversion, and revenue</p>
+              </div>
+              <button class="tip" type="button" data-tip="Would compare region-level cohorts with live customer data." (click)="runAction('cohorts')">
+                <svg class="icon" [lucideIcon]="icons.users" aria-hidden="true"></svg>
+              </button>
+            </div>
+            <div class="region-list">
+              @for (region of regions; track region.region) {
+                <div>
+                  <strong>{{ region.region }}</strong>
+                  <span>{{ region.orders }}</span>
+                  <span>{{ region.conversion }}</span>
+                  <span>{{ region.revenue }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="sub-panel alert-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Signals</h3>
+                <p>Mock operational alerts</p>
+              </div>
+              <button class="tip" type="button" data-tip="Would configure automated alerts and send notifications to the team." (click)="runAction('alerts')">
+                <svg class="icon" [lucideIcon]="icons.bell" aria-hidden="true"></svg>
+              </button>
+            </div>
+            @for (alert of alerts; track alert) {
+              <p><svg class="icon" [lucideIcon]="icons.calendarDays" aria-hidden="true"></svg>{{ alert }}</p>
+            }
+          </div>
+        </section>
+
         <section class="insight-grid" aria-label="Operational intelligence panels">
           <div class="mini-panel funnel-panel">
             <div class="mini-heading">
@@ -223,6 +262,7 @@
         </section>
       </article>
 
+      <aside class="right-rail" aria-label="Financial summary panels">
       <article class="panel table-panel">
         <div class="panel-heading">
           <div>
@@ -274,46 +314,9 @@
         <div class="gauge" aria-label="Budget actual difference is minus nine percent">
           <div class="gauge-fill"></div>
           <strong>-9%</strong>
-          <span class="gauge-left">0M</span>
-          <span class="gauge-right">2M</span>
+          <span class="gauge-left">₱0M</span>
+          <span class="gauge-right">₱2M</span>
         </div>
-      </article>
-
-      <article class="panel regional-panel">
-        <div class="panel-heading">
-          <div>
-            <h3>Regional Pulse</h3>
-            <p>Orders, conversion, and revenue</p>
-          </div>
-          <button class="tip" type="button" data-tip="Would compare region-level cohorts with live customer data." (click)="runAction('cohorts')">
-            <svg class="icon" [lucideIcon]="icons.users" aria-hidden="true"></svg>
-          </button>
-        </div>
-        <div class="region-list">
-          @for (region of regions; track region.region) {
-            <div>
-              <strong>{{ region.region }}</strong>
-              <span>{{ region.orders }}</span>
-              <span>{{ region.conversion }}</span>
-              <span>{{ region.revenue }}</span>
-            </div>
-          }
-        </div>
-      </article>
-
-      <article class="panel alert-panel">
-        <div class="panel-heading">
-          <div>
-            <h3>Signals</h3>
-            <p>Mock operational alerts</p>
-          </div>
-          <button class="tip" type="button" data-tip="Would configure automated alerts and send notifications to the team." (click)="runAction('alerts')">
-            <svg class="icon" [lucideIcon]="icons.bell" aria-hidden="true"></svg>
-          </button>
-        </div>
-        @for (alert of alerts; track alert) {
-          <p><svg class="icon" [lucideIcon]="icons.calendarDays" aria-hidden="true"></svg>{{ alert }}</p>
-        }
       </article>
 
       <article class="panel cash-panel">
@@ -334,6 +337,7 @@
           </button>
         }
       </article>
+      </aside>
     </section>
   </section>
 </main>

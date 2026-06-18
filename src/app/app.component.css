@@ -276,8 +276,8 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(640px, 1fr) 320px;
-  grid-template-rows: 342px 210px 172px 150px 150px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
   gap: 8px;
 }
 
@@ -287,9 +287,13 @@
 }
 
 .trend-panel {
-  grid-row: span 5;
   display: flex;
   flex-direction: column;
+  gap: 8px;
+}
+
+.right-rail {
+  display: grid;
   gap: 8px;
 }
 
@@ -441,11 +445,24 @@
   background: #20bf82;
 }
 
+.pulse-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.82fr);
+  gap: 8px;
+}
+
+.sub-panel {
+  min-width: 0;
+  padding: 9px 10px;
+  background: #f7fbf9;
+  border: 1px solid #c4dcd3;
+}
+
 .insight-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
-  margin-top: auto;
+  margin-top: 0;
 }
 
 .mini-panel {
@@ -590,6 +607,10 @@ table {
   font-size: 12px;
 }
 
+.table-panel {
+  overflow: hidden;
+}
+
 th {
   padding: 4px 4px 7px;
   color: #69736f;
@@ -649,14 +670,14 @@ td:first-child {
 }
 
 .gauge-panel {
-  min-height: 210px;
+  min-height: 190px;
 }
 
 .gauge {
   position: relative;
   width: min(230px, 92%);
   height: 118px;
-  margin: 18px auto 0;
+  margin: 10px auto 0;
   overflow: hidden;
 }
 
@@ -719,19 +740,19 @@ td:first-child {
 
 .regional-panel,
 .alert-panel {
-  min-height: 150px;
+  min-height: 138px;
 }
 
 .region-list {
   display: grid;
-  gap: 6px;
+  gap: 3px;
 }
 
 .region-list div {
   display: grid;
   grid-template-columns: 1.5fr 0.9fr 0.7fr 0.9fr;
   gap: 8px;
-  padding: 6px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #e4eeea;
   font-size: 12px;
 }
@@ -744,20 +765,21 @@ td:first-child {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 7px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #e4eeea;
   font-size: 12px;
   color: #4e5d58;
 }
 
 .cash-panel {
-  min-height: 150px;
+  min-height: 158px;
+  overflow: hidden;
 }
 
 .cash-row {
-  grid-template-columns: 72px 1fr 56px;
+  grid-template-columns: 70px minmax(72px, 1fr) 58px;
   gap: 8px;
-  min-height: 24px;
+  min-height: 25px;
   margin-bottom: 4px;
 }
 
@@ -809,11 +831,14 @@ td:first-child {
 
   .dashboard-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
   }
 
-  .trend-panel {
-    grid-row: auto;
+  .right-rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pulse-row {
+    grid-template-columns: 1fr;
   }
 
   .insight-grid {
@@ -860,6 +885,10 @@ td:first-child {
   }
 
   .insight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .right-rail {
     grid-template-columns: 1fr;
   }
 
