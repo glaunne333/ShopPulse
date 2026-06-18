@@ -1,4 +1,4 @@
-import { Component, Type } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideActivity,
@@ -14,6 +14,7 @@ import {
   LucideDownload,
   LucideDynamicIcon,
   LucideFilter,
+  LucideIconData,
   LucidePackage,
   LucideRefreshCw,
   LucideSearch,
@@ -25,14 +26,13 @@ import {
 } from '@lucide/angular';
 
 type Status = 'up' | 'down' | 'flat';
-type IconData = Type<unknown>;
 
 interface Metric {
   label: string;
   value: string;
   delta: string;
   status: Status;
-  icon: IconData;
+  icon: LucideIconData;
 }
 
 interface TrendPoint {
@@ -74,29 +74,29 @@ interface RegionLine {
 })
 export class AppComponent {
   readonly icons = {
-    alertCircle: LucideAlertCircle,
-    arrowDownRight: LucideArrowDownRight,
-    arrowUpRight: LucideArrowUpRight,
-    bell: LucideBell,
-    calendarDays: LucideCalendarDays,
-    chevronDown: LucideChevronDown,
-    cloud: LucideCloud,
-    database: LucideDatabase,
-    download: LucideDownload,
-    filter: LucideFilter,
-    refreshCw: LucideRefreshCw,
-    search: LucideSearch,
-    slidersHorizontal: LucideSlidersHorizontal,
-    store: LucideStore,
-    users: LucideUsers
+    alertCircle: LucideAlertCircle.icon,
+    arrowDownRight: LucideArrowDownRight.icon,
+    arrowUpRight: LucideArrowUpRight.icon,
+    bell: LucideBell.icon,
+    calendarDays: LucideCalendarDays.icon,
+    chevronDown: LucideChevronDown.icon,
+    cloud: LucideCloud.icon,
+    database: LucideDatabase.icon,
+    download: LucideDownload.icon,
+    filter: LucideFilter.icon,
+    refreshCw: LucideRefreshCw.icon,
+    search: LucideSearch.icon,
+    slidersHorizontal: LucideSlidersHorizontal.icon,
+    store: LucideStore.icon,
+    users: LucideUsers.icon
   };
 
   readonly metrics: Metric[] = [
-    { label: 'Revenue', value: '$1.97M', delta: '+9% vs target', status: 'up', icon: LucideCircleDollarSign },
-    { label: 'Orders', value: '38,502', delta: '+11% vs target', status: 'up', icon: LucideShoppingCart },
-    { label: 'Gross Margin', value: '58.4%', delta: '+3.2 pts', status: 'up', icon: LucideTrendingUp },
-    { label: 'Returns', value: '2.8%', delta: '-0.6 pts', status: 'down', icon: LucidePackage },
-    { label: 'Net Profit', value: '$154K', delta: '-4% vs plan', status: 'down', icon: LucideActivity }
+    { label: 'Revenue', value: '$1.97M', delta: '+9% vs target', status: 'up', icon: LucideCircleDollarSign.icon },
+    { label: 'Orders', value: '38,502', delta: '+11% vs target', status: 'up', icon: LucideShoppingCart.icon },
+    { label: 'Gross Margin', value: '58.4%', delta: '+3.2 pts', status: 'up', icon: LucideTrendingUp.icon },
+    { label: 'Returns', value: '2.8%', delta: '-0.6 pts', status: 'down', icon: LucidePackage.icon },
+    { label: 'Net Profit', value: '$154K', delta: '-4% vs plan', status: 'down', icon: LucideActivity.icon }
   ];
 
   readonly trend: TrendPoint[] = [
