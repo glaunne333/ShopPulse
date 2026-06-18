@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideActivity,
@@ -25,7 +25,7 @@ import {
 } from '@lucide/angular';
 
 type Status = 'up' | 'down' | 'flat';
-type IconData = typeof LucideActivity;
+type IconData = Type<unknown>;
 
 interface Metric {
   label: string;
