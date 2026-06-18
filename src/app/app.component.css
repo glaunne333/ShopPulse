@@ -207,6 +207,29 @@
   transform: translateY(0);
 }
 
+.actions .tip::after {
+  top: calc(100% + 8px);
+  right: 0;
+  bottom: auto;
+}
+
+.right-rail {
+  position: relative;
+  z-index: 3;
+}
+
+.right-rail .tip::after {
+  top: 50%;
+  right: calc(100% + 8px);
+  bottom: auto;
+  transform: translate(-4px, -50%);
+}
+
+.right-rail .tip:hover::after,
+.right-rail .tip:focus-visible::after {
+  transform: translate(0, -50%);
+}
+
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(132px, 1fr));
@@ -470,7 +493,7 @@
   padding: 9px;
   background: #f7fbf9;
   border: 1px solid #c4dcd3;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .mini-heading {
@@ -608,7 +631,7 @@ table {
 }
 
 .table-panel {
-  overflow: hidden;
+  overflow: visible;
 }
 
 th {
@@ -773,7 +796,7 @@ td:first-child {
 
 .cash-panel {
   min-height: 158px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .cash-row {
