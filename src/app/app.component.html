@@ -1,0 +1,216 @@
+<main class="dashboard-shell">
+  <aside class="sidebar" aria-label="Dashboard filters">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg class="icon" [lucideIcon]="icons.store" aria-hidden="true"></svg>
+      </div>
+      <div>
+        <h1>ShopPulse</h1>
+        <p>by Mark Vigo</p>
+      </div>
+    </div>
+
+    <section class="filter-block">
+      <h2>Accounting Method</h2>
+      <div class="segmented" aria-label="Accounting method">
+        <button class="selected" type="button">Accrual</button>
+        <button type="button">Cash</button>
+      </div>
+    </section>
+
+    <section class="filter-block">
+      <h2>Date Range</h2>
+      <button class="select-button" type="button" title="Would open a date-range picker backed by available reporting periods.">
+        <span>2026</span>
+        <svg class="icon" [lucideIcon]="icons.chevronDown" aria-hidden="true"></svg>
+      </button>
+    </section>
+
+    <section class="filter-block">
+      <h2>Channel</h2>
+      <button class="select-button" type="button" title="Would filter the dashboard by connected ecommerce and retail channels.">
+        <span>All channels</span>
+        <svg class="icon" [lucideIcon]="icons.chevronDown" aria-hidden="true"></svg>
+      </button>
+    </section>
+
+    <div class="side-status">
+      <svg class="icon" [lucideIcon]="icons.cloud" aria-hidden="true"></svg>
+      <span>Mock sync ready</span>
+    </div>
+  </aside>
+
+  <section class="workspace">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Business intelligence demo</p>
+        <h2>ShopPulse by Mark Vigo</h2>
+      </div>
+      <div class="actions" aria-label="Dashboard actions">
+        <button type="button" title="Would refresh live metrics from the connected database.">
+          <svg class="icon" [lucideIcon]="icons.refreshCw" aria-hidden="true"></svg>
+        </button>
+        <button type="button" title="Would open saved filters, segments, and custom metric controls.">
+          <svg class="icon" [lucideIcon]="icons.slidersHorizontal" aria-hidden="true"></svg>
+        </button>
+        <button type="button" title="Would export the current dashboard view as CSV or PDF.">
+          <svg class="icon" [lucideIcon]="icons.download" aria-hidden="true"></svg>
+        </button>
+        <button type="button" title="Would show database sync status, freshness, and connector health.">
+          <svg class="icon" [lucideIcon]="icons.database" aria-hidden="true"></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="metric-grid" aria-label="Key metrics">
+      @for (metric of metrics; track metric.label) {
+        <article class="metric-card">
+          <div class="metric-label">
+            <svg class="icon" [lucideIcon]="metric.icon" aria-hidden="true"></svg>
+            <span>{{ metric.label }}</span>
+          </div>
+          <strong>{{ metric.value }}</strong>
+          <p [class]="metric.status">
+            <svg class="icon" [lucideIcon]="metric.status === 'up' ? icons.arrowUpRight : icons.arrowDownRight" aria-hidden="true"></svg>
+            {{ metric.delta }}
+          </p>
+        </article>
+      }
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel trend-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Revenue Budget / Fact Trend</h3>
+            <p>Monthly sales performance</p>
+          </div>
+          <button type="button" title="Would search transactions and explain the variance for the selected month.">
+            <svg class="icon" [lucideIcon]="icons.search" aria-hidden="true"></svg>
+          </button>
+        </div>
+
+        <div class="legend">
+          <span><b class="actual-dot"></b>Actual</span>
+          <span><b class="plan-dot"></b>Budget</span>
+        </div>
+
+        <div class="chart-wrap">
+          <svg class="line-chart" viewBox="0 0 640 180" role="img" aria-label="Revenue actual and budget trend">
+            <path class="grid-line" d="M0 25 H640 M0 75 H640 M0 125 H640 M0 175 H640"></path>
+            <path class="plan-line" [attr.d]="planPath"></path>
+            <path class="actual-line" [attr.d]="actualPath"></path>
+            @for (dot of planDots; track dot.x) {
+              <circle class="plan-point" [attr.cx]="dot.x" [attr.cy]="dot.y" r="4"></circle>
+            }
+            @for (dot of actualDots; track dot.x) {
+              <circle class="actual-point" [attr.cx]="dot.x" [attr.cy]="dot.y" r="4"></circle>
+            }
+          </svg>
+          <div class="months">
+            @for (point of trend; track point.month) {
+              <span>{{ point.month }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="bar-section">
+          <h3>Sales Channels</h3>
+          @for (category of categories; track category.label) {
+            <div class="bar-row">
+              <span>{{ category.label }}</span>
+              <div class="bars">
+                <b class="plan-bar" [style.width]="barWidth(category.plan)">{{ category.plan | number: '1.2-2' }}M</b>
+                <b class="actual-bar" [style.width]="barWidth(category.actual)">{{ category.actual | number: '1.2-2' }}M</b>
+              </div>
+            </div>
+          }
+        </div>
+      </article>
+
+      <article class="panel table-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Budget</h3>
+            <p>Account performance</p>
+          </div>
+          <button type="button" title="Would open editable budget mappings and account rollups.">
+            <svg class="icon" [lucideIcon]="icons.filter" aria-hidden="true"></svg>
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Budget</th>
+              <th>Actual</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (line of budgetLines; track line.account) {
+              <tr>
+                <td><span class="expand">+</span>{{ line.account }}</td>
+                <td>{{ line.budget }}</td>
+                <td>{{ line.actual }}</td>
+                <td [class]="line.status">{{ line.variance }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </article>
+
+      <article class="panel gauge-panel">
+        <div class="panel-heading compact">
+          <h3>Budget / Actual Difference</h3>
+          <button type="button" title="Would drill into the accounts contributing most to this variance.">
+            <svg class="icon" [lucideIcon]="icons.alertCircle" aria-hidden="true"></svg>
+          </button>
+        </div>
+        <div class="gauge" aria-label="Budget actual difference is minus nine percent">
+          <div class="gauge-fill"></div>
+          <strong>-9%</strong>
+          <span class="gauge-left">0M</span>
+          <span class="gauge-right">2M</span>
+        </div>
+      </article>
+
+      <article class="panel regional-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Regional Pulse</h3>
+            <p>Orders, conversion, and revenue</p>
+          </div>
+          <button type="button" title="Would compare region-level cohorts with live customer data.">
+            <svg class="icon" [lucideIcon]="icons.users" aria-hidden="true"></svg>
+          </button>
+        </div>
+        <div class="region-list">
+          @for (region of regions; track region.region) {
+            <div>
+              <strong>{{ region.region }}</strong>
+              <span>{{ region.orders }}</span>
+              <span>{{ region.conversion }}</span>
+              <span>{{ region.revenue }}</span>
+            </div>
+          }
+        </div>
+      </article>
+
+      <article class="panel alert-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Signals</h3>
+            <p>Mock operational alerts</p>
+          </div>
+          <button type="button" title="Would configure automated alerts and send notifications to the team.">
+            <svg class="icon" [lucideIcon]="icons.bell" aria-hidden="true"></svg>
+          </button>
+        </div>
+        @for (alert of alerts; track alert) {
+          <p><svg class="icon" [lucideIcon]="icons.calendarDays" aria-hidden="true"></svg>{{ alert }}</p>
+        }
+      </article>
+    </section>
+  </section>
+</main>
